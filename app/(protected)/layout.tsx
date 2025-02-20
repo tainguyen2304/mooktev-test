@@ -1,16 +1,23 @@
-import { Navbar } from "./_components/navbar";
+import { UserButton } from "@/components/auth/user-button";
+import { AppSidebar } from "../../components/app-sidebar";
+import { SidebarProvider } from "../../components/ui/sidebar";
 
 interface ProtectedLayoutProps {
   children: React.ReactNode;
-};
+}
 
 const ProtectedLayout = ({ children }: ProtectedLayoutProps) => {
-  return ( 
-    <div className="h-full w-full flex flex-col gap-y-10 items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-      <Navbar />
-      {children}
-    </div>
-   );
-}
- 
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <main className="h-[100vh] overflow-hidden flex flex-col  w-full p-4 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))">
+        <div className="flex justify-end mb-2">
+          <UserButton />
+        </div>
+        <div className="flex-1 overflow-y-auto">{children}</div>
+      </main>
+    </SidebarProvider>
+  );
+};
+
 export default ProtectedLayout;
