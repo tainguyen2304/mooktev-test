@@ -1,12 +1,12 @@
 "use server";
 
+import { Driver } from "@prisma/client";
 import { z } from "zod";
 import { getUserById } from "../data/user";
 import { currentUser } from "../lib/auth";
 import { db } from "../lib/db";
 import { DriverSchema } from "../schemas";
 import { ApiResponse } from "../types";
-import { Driver } from "@prisma/client";
 
 export const createDriver = async (
   values: z.infer<typeof DriverSchema>,
