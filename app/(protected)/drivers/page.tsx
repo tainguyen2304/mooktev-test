@@ -44,9 +44,9 @@ import {
 } from "@/components/ui/table";
 import useDialog from "@/hooks/useDialog";
 import useDriver from "@/hooks/useDriver";
-import { debounce, toastFailed, toastSuccess } from "@/lib/utils";
 import { DRIVERS_QUERY_KEY } from "@/keys/query-keys";
-import { Driver } from "@prisma/client";
+import { debounce, toastFailed, toastSuccess } from "@/lib/utils";
+import { IDriver } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import {
@@ -79,7 +79,7 @@ const Drivers = () => {
     handleOpen,
     handleClose,
     data: driverId,
-  } = useDialog<Driver | string>();
+  } = useDialog<IDriver | string>();
 
   const normalizeText = (text: string) => unidecode(text).toLowerCase();
 
@@ -123,7 +123,7 @@ const Drivers = () => {
     ]
   );
 
-  const columns: ColumnDef<Driver>[] = [
+  const columns: ColumnDef<IDriver>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -234,7 +234,7 @@ const Drivers = () => {
         const driver = row.original;
         const vehicle = driver.vehicle;
         return (
-          <div>{`${vehicle.brand}-${vehicle.model}-${vehicle.plate}`}</div>
+          <div>{`${vehicle?.brand}-${vehicle?.model}-${vehicle?.plate}`}</div>
         );
       },
     },

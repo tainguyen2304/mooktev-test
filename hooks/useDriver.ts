@@ -1,7 +1,6 @@
 import { getAllDrivers } from "@/data/driver";
 import { DRIVERS_QUERY_KEY } from "@/keys/query-keys";
-import { ApiResponse } from "@/types";
-import { Driver } from "@prisma/client";
+import { ApiResponse, IDriver } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
 const useDriver = () => {
@@ -10,7 +9,7 @@ const useDriver = () => {
     isLoading,
     isFetching,
     isRefetching,
-  } = useQuery<ApiResponse<Driver[] | null>>({
+  } = useQuery<ApiResponse<IDriver[] | null>>({
     initialData: { data: [], message: "", status: 0 },
     queryKey: DRIVERS_QUERY_KEY,
     queryFn: () => getAllDrivers(),

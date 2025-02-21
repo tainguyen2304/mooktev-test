@@ -1,6 +1,6 @@
 "use server";
 
-import { ApiResponse } from "@/types/index";
+import { ApiResponse, IRideDetail } from "@/types/index";
 import { db } from "@/lib/db";
 import { BookingLogs, Bookings } from "@prisma/client";
 
@@ -29,7 +29,7 @@ export const getAllBookingsRide = async (): Promise<
 
 export const getDetailBookingRide = async (
   rideId: string
-): Promise<ApiResponse<Bookings | null>> => {
+): Promise<ApiResponse<IRideDetail | null>> => {
   try {
     const rideDetail = await db.bookings.findUnique({
       where: { id: rideId },
@@ -49,7 +49,7 @@ export const getDetailBookingRide = async (
     return {
       status: 200,
       data: rideDetail,
-      message: "Found booking detail",
+      message: "Find booking detail",
     };
   } catch (error) {
     return {
