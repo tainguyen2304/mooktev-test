@@ -1,8 +1,7 @@
 import { logBookingActivity } from "@/actions/booking-ride";
 import { getAllBookingLogs } from "@/data/booking-rides";
 import { BOOKING_RIDE_LOGS_QUERY_KEY } from "@/keys/query-keys";
-import { ApiResponse } from "@/types";
-import { BookingLogs } from "@prisma/client";
+import { ApiResponse, IBookingLogs } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useBookingRideLogs = () => {
@@ -13,7 +12,7 @@ const useBookingRideLogs = () => {
     isLoading: isLoadingBookingLogs,
     isFetching,
     isRefetching,
-  } = useQuery<ApiResponse<BookingLogs[] | null>>({
+  } = useQuery<ApiResponse<IBookingLogs[] | null>>({
     initialData: { data: [], message: "", status: 0 },
     queryKey: BOOKING_RIDE_LOGS_QUERY_KEY,
     queryFn: () => getAllBookingLogs(),

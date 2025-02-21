@@ -1,6 +1,6 @@
 "use server";
 
-import { ApiResponse, IRideDetail } from "@/types/index";
+import { ApiResponse, IBookingLogs, IRideDetail } from "@/types/index";
 import { db } from "@/lib/db";
 import { BookingLogs, Bookings } from "@prisma/client";
 
@@ -61,12 +61,12 @@ export const getDetailBookingRide = async (
 };
 
 export const getAllBookingLogs = async (): Promise<
-  ApiResponse<BookingLogs[] | null>
+  ApiResponse<IBookingLogs[] | null>
 > => {
   try {
     const logs = await db.bookingLogs.findMany({
       include: {
-        user: { select: { name: true, role: true } },
+        user: true,
         booking: {
           include: {
             driver: true,

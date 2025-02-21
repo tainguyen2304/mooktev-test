@@ -1,4 +1,10 @@
-import { BookingLogsAction, TripStatus, User, Vehicle } from "@prisma/client";
+import {
+  BookingLogsAction,
+  TripStatus,
+  User,
+  UserRole,
+  Vehicle,
+} from "@prisma/client";
 
 export interface ApiResponse<T> {
   status: number;
@@ -56,9 +62,13 @@ export interface IReview {
 
 export interface IBookingLogs {
   id: string;
-  bookingId?: string;
+  bookingId: string | null;
   userId: string;
   action: BookingLogsAction;
-  timestamp: string;
+  timestamp: Date;
   details: any;
+  user: User;
+  booking?: {
+    driver: IDriver;
+  } | null;
 }

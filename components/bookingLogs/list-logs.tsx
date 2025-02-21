@@ -1,7 +1,5 @@
 import useBookingRideLogs from "@/hooks/useBookingRideLogs";
-import useDriver from "@/hooks/useDriver";
 import { BookingLogsAction, UserRole } from "@prisma/client";
-import { useCallback, useEffect } from "react";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
@@ -98,7 +96,7 @@ const ListLogs = () => {
                           <li>
                             Địa chỉ trả: {log.details.newValues.dropOffLocation}
                           </li>
-                          <li>Tài xế: {log.booking.driver.name}</li>
+                          <li>Tài xế: {log.booking?.driver?.name}</li>
                         </ul>
                       )}
                     </div>

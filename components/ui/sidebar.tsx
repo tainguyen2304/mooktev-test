@@ -431,37 +431,42 @@ SidebarGroup.displayName = "SidebarGroup";
 const SidebarGroupLabel = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> & { asChild?: boolean }
->(({ className, asChild = false, ...props }, ref) => {
-  const Comp = asChild ? Slot : "div";
+>(
+  (
+    { className, asChild = false, ...props },
+    ref: React.Ref<HTMLDivElement>
+  ) => {
+    const Comp = asChild ? Slot : "div";
 
-  return (
-    <Comp
-      ref={ref}
-      data-sidebar="group-label"
-      className={cn(
-        "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-        "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
-        className
-      )}
-      {...props}
-    />
-  );
-});
+    return (
+      <Comp
+        ref={ref as any} // 👈 Tạm thời ép kiểu để tránh lỗi TypeScript
+        data-sidebar="group-label"
+        className={cn(
+          "flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-none ring-sidebar-ring transition-[margin,opa] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+          "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+);
+
 SidebarGroupLabel.displayName = "SidebarGroupLabel";
 
 const SidebarGroupAction = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button"> & { asChild?: boolean }
+  React.ComponentPropsWithoutRef<"button"> & { asChild?: boolean }
 >(({ className, asChild = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
-      ref={ref}
+      ref={ref as any} // ✅ Ép kiểu an toàn
       data-sidebar="group-action"
       className={cn(
         "absolute right-3 top-3.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
-        // Increases the hit area of the button on mobile.
         "after:absolute after:-inset-2 after:md:hidden",
         "group-data-[collapsible=icon]:hidden",
         className
@@ -535,7 +540,7 @@ const sidebarMenuButtonVariants = cva(
 
 const SidebarMenuButton = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button"> & {
+  React.ComponentPropsWithoutRef<"button"> & {
     asChild?: boolean;
     isActive?: boolean;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
@@ -556,9 +561,17 @@ const SidebarMenuButton = React.forwardRef<
     const Comp = asChild ? Slot : "button";
     const { isMobile, state } = useSidebar();
 
+    // ✅ Xử lý ref để tránh lỗi TypeScript
+    const buttonRef = (instance: HTMLButtonElement | null) => {
+      if (typeof ref === "function") ref(instance);
+      else if (ref)
+        (ref as React.MutableRefObject<HTMLButtonElement | null>).current =
+          instance;
+    };
+
     const button = (
       <Comp
-        ref={ref}
+        ref={buttonRef} // ✅ Dùng custom ref để tránh lỗi
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
@@ -567,14 +580,10 @@ const SidebarMenuButton = React.forwardRef<
       />
     );
 
-    if (!tooltip) {
-      return button;
-    }
+    if (!tooltip) return button;
 
     if (typeof tooltip === "string") {
-      tooltip = {
-        children: tooltip,
-      };
+      tooltip = { children: tooltip };
     }
 
     return (
@@ -594,16 +603,24 @@ SidebarMenuButton.displayName = "SidebarMenuButton";
 
 const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<"button"> & {
+  React.ComponentPropsWithoutRef<"button"> & {
     asChild?: boolean;
     showOnHover?: boolean;
   }
 >(({ className, asChild = false, showOnHover = false, ...props }, ref) => {
   const Comp = asChild ? Slot : "button";
 
+  // ✅ Custom ref handler để đảm bảo TypeScript không báo lỗi
+  const buttonRef = (instance: HTMLButtonElement | null) => {
+    if (typeof ref === "function") ref(instance);
+    else if (ref)
+      (ref as React.MutableRefObject<HTMLButtonElement | null>).current =
+        instance;
+  };
+
   return (
     <Comp
-      ref={ref}
+      ref={buttonRef} // ✅ Dùng custom ref handler
       data-sidebar="menu-action"
       className={cn(
         "absolute right-1 top-1.5 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-none ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0",
@@ -622,6 +639,8 @@ const SidebarMenuAction = React.forwardRef<
   );
 });
 SidebarMenuAction.displayName = "SidebarMenuAction";
+
+export default SidebarMenuAction;
 
 const SidebarMenuBadge = React.forwardRef<
   HTMLDivElement,
@@ -707,7 +726,7 @@ SidebarMenuSubItem.displayName = "SidebarMenuSubItem";
 
 const SidebarMenuSubButton = React.forwardRef<
   HTMLAnchorElement,
-  React.ComponentProps<"a"> & {
+  React.ComponentPropsWithoutRef<"a"> & {
     asChild?: boolean;
     size?: "sm" | "md";
     isActive?: boolean;
@@ -715,9 +734,17 @@ const SidebarMenuSubButton = React.forwardRef<
 >(({ asChild = false, size = "md", isActive, className, ...props }, ref) => {
   const Comp = asChild ? Slot : "a";
 
+  // ✅ Custom ref handler để đảm bảo TypeScript không báo lỗi
+  const anchorRef = (instance: HTMLAnchorElement | null) => {
+    if (typeof ref === "function") ref(instance);
+    else if (ref)
+      (ref as React.MutableRefObject<HTMLAnchorElement | null>).current =
+        instance;
+  };
+
   return (
     <Comp
-      ref={ref}
+      ref={anchorRef} // ✅ Dùng custom ref handler
       data-sidebar="menu-sub-button"
       data-size={size}
       data-active={isActive}
