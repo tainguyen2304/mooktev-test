@@ -12,11 +12,12 @@ const DriverDetail = async ({
   const id = (await params).id;
   const { data: driver } = await getDetailDriver(id);
 
-  const averageRating =
-    driver?.reviews?.length > 0
-      ? driver.reviews.reduce((acc, review) => acc + review.rating, 0) /
-        driver.reviews.length
-      : 0;
+  let averageRating = 0;
+  if (driver?.reviews && driver.reviews.length > 0) {
+    averageRating =
+      driver.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      driver.reviews.length;
+  }
 
   return (
     <div className="space-y-4">
@@ -27,25 +28,25 @@ const DriverDetail = async ({
       <hr />
       <Card>
         <CardContent className="p-4">
-          <p className="text-xl font-bold">{driver.name}</p>
-          <p className="text-gray-600">📧 {driver.email}</p>
-          <p className="text-gray-600">📞 {driver.phone}</p>
+          <p className="text-xl font-bold">{driver?.name}</p>
+          <p className="text-gray-600">📧 {driver?.email}</p>
+          <p className="text-gray-600">📞 {driver?.phone}</p>
         </CardContent>
       </Card>
       <Card>
         <CardContent className="p-4">
           <p className="text-lg font-semibold">Vehicle Details</p>
           <p>
-            {driver.vehicle.brand} - {driver.vehicle.model}
+            {driver?.vehicle?.brand} - {driver?.vehicle?.model}
           </p>
-          <p>Plate: {driver.vehicle.plate}</p>
+          <p>Plate: {driver?.vehicle?.plate}</p>
         </CardContent>
       </Card>
       <Card>
         <CardContent className="p-4">
           <p className="text-lg font-semibold">Completed Rides</p>
           <div className="space-y-2">
-            {driver.trips.map((trip) => {
+            {driver?.trips.map((trip) => {
               const review = driver.reviews.find((r) => r.tripId === trip.id);
               return (
                 <Card key={trip.id} className="border p-2 rounded-md">

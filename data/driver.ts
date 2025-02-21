@@ -1,11 +1,11 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { ApiResponse } from "@/types";
-import { Driver, TripStatus } from "@prisma/client";
+import { ApiResponse, IDriver, IDriverDetail } from "@/types";
+import { TripStatus } from "@prisma/client";
 
 export const getAllDrivers = async (): Promise<
-  ApiResponse<Driver[] | null>
+  ApiResponse<IDriver[] | null>
 > => {
   try {
     const allDriver = await db.driver.findMany({
@@ -22,7 +22,7 @@ export const getAllDrivers = async (): Promise<
 
 export const getDetailDriver = async (
   id: string
-): Promise<ApiResponse<Driver | null>> => {
+): Promise<ApiResponse<IDriverDetail | null>> => {
   try {
     const driverDetail = await db.driver.findUnique({
       where: { id },

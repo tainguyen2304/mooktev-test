@@ -12,7 +12,12 @@ export interface IDriver {
   email: string;
   phone: string;
   orderIndex: number;
-  vehicle?: Vehicle | null;
+  vehicle?: IVehicle | null;
+}
+
+export interface IDriverDetail extends IDriver {
+  reviews: IReview[];
+  trips: IBookings[];
 }
 
 export interface IVehicle {
@@ -46,7 +51,7 @@ export interface IReview {
   driverId: string;
   tripId: string;
   rating: number;
-  comment?: string;
+  comment?: string | null;
 }
 
 export interface IBookingLogs {
