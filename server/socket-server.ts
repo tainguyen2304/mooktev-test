@@ -10,7 +10,7 @@ import { BookingLogs, Bookings, User } from "@prisma/client";
 import * as http from "http";
 import { Server } from "socket.io";
 
-const PORT = 3001;
+const PORT = process.env.NEXT_PUBLIC_PORT_SOCKET_SERVERL;
 
 const server = http.createServer();
 const io = new Server(server, {

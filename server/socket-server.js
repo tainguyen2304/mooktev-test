@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var socket_keys_1 = require("../keys/socket-keys");
 var http = require("http");
 var socket_io_1 = require("socket.io");
-var PORT = 3001;
+var PORT = process.env.NEXT_PUBLIC_PORT_SOCKET_SERVERL;
 var server = http.createServer();
 var io = new socket_io_1.Server(server, {
     cors: { origin: "*" },
