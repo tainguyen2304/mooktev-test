@@ -8,7 +8,7 @@ interface SocketState {
   disconnect: () => void;
 }
 
-const SOCKET_SERVER_URL = `http://localhost:${process.env.NEXT_PUBLIC_SOCKET_SERVER_URL}`;
+const SOCKET_SERVER_URL = process.env.NEXT_PUBLIC_URL_SOCKET_SERVERL;
 
 export const useSocketStore = create<SocketState>((set, get) => ({
   socket: null,
