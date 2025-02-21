@@ -176,7 +176,7 @@ export const deleteDriver = async (
 export const deleteManyDrivers = async (
   ids: string[],
   callback?: () => void
-): Promise<ApiResponse<Driver | null>> => {
+): Promise<ApiResponse<{ count: number }>> => {
   const user = await currentUser();
   1;
   if (!user) {
@@ -189,15 +189,23 @@ export const deleteManyDrivers = async (
     throw new Error("Unauthorized");
   }
 
-  const data = await db.driver.deleteMany({
-    where: {
-      id: { in: ids },
-    },
-  });
+  try {
+    const data = await db.driver.deleteMany({
+      where: {
+        id: { in: ids },
+      },
+    });
 
-  if (callback) {
-    callback();
+    if (callback) {
+      callback();
+    }
+
+    return { message: "Driver Deleted", status: 200, data: data };
+  } catch (error) {
+    return {
+      message: "Error deleting booking",
+      status: 500,
+      data: { count: 0 },
+    };
   }
-
-  return { status: 200, message: "Delete success", data: data };
 };
